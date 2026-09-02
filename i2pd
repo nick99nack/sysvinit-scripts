@@ -1,0 +1,44 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:		i2pd
+# Required-Start:	$local_fs $network
+# Required-Stop:	$local_fs $network
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description:	i2pd Service
+### END INIT INFO
+
+DAEMON="/usr/bin/i2pd"
+PIDFILE="/var/run/i2pd.pid"
+SVCUSER="i2p:i2p"
+
+case "$1" in
+	start)
+		echo "Starting i2pd..."
+		start-stop-daemon --start --background --pidfile "$PIDFILE" --make-pidfile --chuid "$SVCUSER" --exec "$DAEMON"
+		;;
+	stop)
+		echo "Stopping i2pd..."
+		start-stop-daemon --stop --pidfile "$PIDFILE" --chuid "$SVCUSER"
+        	rm -f "$PIDFILE"
+        	;;
+	restart)
+		$0 stop
+		sleep 1
+		$0 start
+		;;
+	status)
+		if [ -f "$PIDFILE" ]; then
+			echo "i2pd is running (PID $(cat $PIDFILE))."
+		else
+			echo "i2pd is not running."
+		fi
+		;;
+	*)
+		echo "Usage: /etc/init.d/i2pd {start|stop|restart|status}"
+		exit 1
+		;;
+	esac
+
+exit 0
