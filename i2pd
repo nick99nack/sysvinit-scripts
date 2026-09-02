@@ -11,16 +11,15 @@
 
 DAEMON="/usr/bin/i2pd"
 PIDFILE="/var/run/i2pd.pid"
-SVCUSER="i2p:i2p"
 
 case "$1" in
 	start)
 		echo "Starting i2pd..."
-		start-stop-daemon --start --background --pidfile "$PIDFILE" --make-pidfile --chuid "$SVCUSER" --exec "$DAEMON"
+		start-stop-daemon --start --background --pidfile "$PIDFILE" --make-pidfile --exec "$DAEMON"
 		;;
 	stop)
 		echo "Stopping i2pd..."
-		start-stop-daemon --stop --pidfile "$PIDFILE" --chuid "$SVCUSER"
+		start-stop-daemon --stop --pidfile "$PIDFILE"
         	rm -f "$PIDFILE"
         	;;
 	restart)
